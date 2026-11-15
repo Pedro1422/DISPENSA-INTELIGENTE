@@ -1,0 +1,14 @@
+body { font-family: sans-serif; margin: 0; padding-bottom: 60px; }
+header { background: #1f6f5c; color: #fff; padding: 16px; font-weight: bold; display: flex; justify-content: space-between; }
+header small { font-weight: normal; }
+header small.offline { color: #ffd0c4; }
+.tela { display: none; padding: 16px; }
+.tela.ativa { display: block; }
+input { display: block; width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box; }
+button { padding: 10px 16px; }
+ul { list-style: none; padding: 0; }
+li { border: 1px solid #ccc; border-radius: 6px; padding: 10px; margin-top: 10px; }
+li.acabando { border-left: 6px solid #c8431f; }
+.status { color: #c8431f; font-weight: bold; }
+nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: #eee; }
+nav button { flex: 1; border: 0; background: none; padding: 16px 0; }
