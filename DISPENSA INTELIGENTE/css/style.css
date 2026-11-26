@@ -6,6 +6,8 @@ header small { font-weight: normal; }
 header small.offline { color: #ffd0c4; }
 main { max-width: 640px; margin: 0 auto; }
 .tela { padding: 16px; }
+.login { max-width: 420px; }
+#login-aviso { min-height: 1.45em; }
 label { display: block; font-weight: 600; margin-bottom: 4px; }
 input, select { display: block; width: 100%; padding: 10px; margin-bottom: 4px; font: inherit; }
 input[aria-invalid="true"] { border: 2px solid var(--alerta); }
