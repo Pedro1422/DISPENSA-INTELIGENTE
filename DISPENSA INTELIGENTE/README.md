@@ -22,25 +22,13 @@ Pedro Paulo Soares e Maike Barros.
 
 A divisão abaixo é inicial e pode ser ajustada ao longo do desenvolvimento. Pedro Paulo Soares fica responsável pela estrutura da página em `index.html`, pela organização do repositório e pelo módulo de gestão da despensa em `js/app.js`, incluindo cadastro, cálculo de dias restantes, status "Acabando" e o botão "Comprei de novo". Maike Barros cuida do visual e da responsividade em `css/style.css` e desenvolve o otimizador de compras, com a comparação entre os três mercados, o melhor mercado único e a cesta otimizada, além da persistência no `localStorage`. Os dois participam dos testes e da revisão final, e a documentação, incluindo este README, é mantida em conjunto.
 
-## Estrutura
+## Estrutura do repositório
 
 ```
-DISPENSA INTELIGENTE/
-├── README.md
-├── index.html
-├── service-worker.js
-├── css/
-│   └── style.css
-├── data/
-│   └── dados.json
-└── js/
-    ├── app.js
-    ├── armazenamento.js
-    ├── estado.js
-    ├── interface.js
-    ├── navegacao.js
-    ├── otimizador.js
-    └── validacao.js
+README.md
+index.html
+css/style.css
+js/app.js
 ```
 
 ## Tecnologias
