@@ -3,52 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1f6f5c">
   <title>Despensa Inteligente</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <header>
     <span>Despensa Inteligente</span>
-    <small id="conexao">online</small>
+    <small id="conexao" role="status">online</small>
   </header>
 
-  <section id="inicio" class="tela ativa">
-    <h2>Início</h2>
-    <p>Saiba o que está acabando em casa e onde comprar mais barato.</p>
-    <p>Itens na despensa: <strong id="total">0</strong></p>
-    <p>Itens acabando: <strong id="total-acabando">0</strong></p>
-    <button data-ir="despensa">Cadastrar produto</button>
-  </section>
+  <div id="mensagem" class="mensagem" role="status" aria-live="polite"></div>
 
-  <section id="despensa" class="tela">
-    <h2>Despensa</h2>
-    <input id="nome" placeholder="Nome do produto">
-    <input id="quantidade" placeholder="Quantidade" type="number" min="1">
-    <input id="duracao" placeholder="Dura quantos dias?" type="number" min="1">
-    <button id="adicionar">Adicionar</button>
-    <ul id="lista-despensa"></ul>
-  </section>
+  <main>
+    <section id="inicio" class="tela" aria-labelledby="t-inicio">
+      <h2 id="t-inicio">Início</h2>
+      <p>Saiba o que está acabando em casa e onde comprar mais barato.</p>
+      <p>Itens na despensa: <strong id="total">0</strong></p>
+      <p>Itens acabando: <strong id="total-acabando">0</strong></p>
+      <a class="botao" href="#despensa">Cadastrar produto</a>
+    </section>
 
-  <section id="compras" class="tela">
-    <h2>Lista de compras</h2>
-    <p>Itens que estão acabando:</p>
-    <ul id="lista-compras"></ul>
-  </section>
+    <section id="despensa" class="tela" aria-labelledby="t-despensa" hidden>
+      <h2 id="t-despensa">Despensa</h2>
+      <form id="form-produto" novalidate>
+        <label for="nome">Nome do produto</label>
+        <input id="nome" name="nome" maxlength="40" autocomplete="off" required>
+        <span class="erro" id="erro-nome"></span>
 
-  <section id="sobre" class="tela">
-    <h2>Sobre o projeto</h2>
-    <p>Projeto da disciplina Introdução ao Desenvolvimento para Dispositivos Móveis.</p>
-    <p>Os dados ficam salvos apenas neste aparelho.</p>
-    <p>Integrantes: Pedro Paulo Soares e Maike Barros.</p>
-  </section>
+        <label for="categoria">Categoria</label>
+        <select id="categoria" name="categoria"></select>
 
-  <nav>
-    <button data-ir="inicio">Início</button>
-    <button data-ir="despensa">Despensa</button>
-    <button data-ir="compras">Compras</button>
-    <button data-ir="sobre">Sobre</button>
+        <label for="quantidade">Quantidade (unidades)</label>
+        <input id="quantidade" name="quantidade" type="number" inputmode="numeric" min="1" max="999" required>
+        <span class="erro" id="erro-quantidade"></span>
+
+        <label for="duracao">Dura quantos dias?</label>
+        <input id="duracao" name="duracao" type="number" inputmode="numeric" min="1" max="365" required>
+        <span class="erro" id="erro-duracao"></span>
+
+        <button type="submit">Adicionar</button>
+        <button type="button" id="exemplos" class="secundario">Carregar exemplos</button>
+      </form>
+      <ul id="lista-despensa"></ul>
+    </section>
+
+    <section id="compras" class="tela" aria-labelledby="t-compras" hidden>
+      <h2 id="t-compras">Lista de compras</h2>
+      <p>Itens que estão acabando. Informe o preço por unidade em cada mercado.</p>
+      <ul id="lista-compras"></ul>
+      <h3>Onde comprar</h3>
+      <div id="resultado"></div>
+    </section>
+
+    <section id="sobre" class="tela" aria-labelledby="t-sobre" hidden>
+      <h2 id="t-sobre">Sobre o projeto</h2>
+      <p>Projeto da disciplina Introdução ao Desenvolvimento para Dispositivos Móveis (Afya Centro Universitário Ji-Paraná), professor Romário Vitorino Ferreira.</p>
+      <p>Problema: famílias não sabem quando os itens da despensa vão acabar e compram sem comparar preços entre mercados.</p>
+      <p>Integrantes: Pedro Paulo Soares e Maike Barros.</p>
+      <p>Privacidade: nada é enviado a servidores. Produtos, datas e preços ficam só neste aparelho (localStorage), os preços são digitados por você e os mercados são genéricos (A, B e C).</p>
+      <p>Recursos do dispositivo: detecção de conexão (online/offline). O app funciona sem internet depois do primeiro carregamento.</p>
+    </section>
+  </main>
+
+  <nav aria-label="Principal">
+    <a href="#inicio">Início</a>
+    <a href="#despensa">Despensa</a>
+    <a href="#compras">Compras</a>
+    <a href="#sobre">Sobre</a>
   </nav>
 
-  <script src="js/app.js"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>

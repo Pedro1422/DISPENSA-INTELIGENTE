@@ -1,106 +1,92 @@
-// ---------- Dados (salvos no localStorage) ----------
-var itens = JSON.parse(localStorage.getItem("itens")) || [];
+// Ponto de entrada: liga estado, validação, navegação e interface.
+import * as estado from "./estado.js";
+import * as ui from "./interface.js";
+import { iniciar } from "./navegacao.js";
+import { validarProduto, validarPreco } from "./validacao.js";
 
-function salvar() {
-  localStorage.setItem("itens", JSON.stringify(itens));
+let config = { mercados: ["Mercado A", "Mercado B", "Mercado C"], categorias: ["Outros"], exemplos: [] };
+
+function atualizar() {
+  const itens = estado.listar();
+  ui.renderInicio(itens);
+  ui.renderDespensa(itens, acoes);
+  ui.renderCompras(itens, acoes, config.mercados);
 }
 
-// ---------- Cálculo de dias restantes ----------
-function diasRestantes(item) {
-  var umDia = 24 * 60 * 60 * 1000;
-  var passados = Math.floor((Date.now() - item.data) / umDia);
-  return item.duracao - passados;
+function confirmarGravacao(ok, texto) {
+  if (ok) ui.mensagem(texto);
+  else ui.mensagem("Não foi possível salvar neste aparelho (armazenamento cheio ou bloqueado).", "erro");
+  atualizar();
 }
 
-function estaAcabando(item) {
-  return diasRestantes(item) <= 2;
-}
-
-// ---------- Ações ----------
-function adicionar() {
-  var nome = document.getElementById("nome").value.trim();
-  var quantidade = Number(document.getElementById("quantidade").value);
-  var duracao = Number(document.getElementById("duracao").value);
-
-  if (nome === "" || quantidade < 1 || duracao < 1) {
-    alert("Preencha nome, quantidade e duração.");
-    return;
-  }
-
-  itens.push({ nome: nome, quantidade: quantidade, duracao: duracao, data: Date.now() });
-  salvar();
-  document.getElementById("nome").value = "";
-  document.getElementById("quantidade").value = "";
-  document.getElementById("duracao").value = "";
-  mostrar();
-}
-
-function comprouDeNovo(posicao) {
-  itens[posicao].data = Date.now(); // reinicia a contagem
-  salvar();
-  mostrar();
-}
-
-// ---------- Mostrar na tela ----------
-function criarLinha(item, posicao, comBotao) {
-  var li = document.createElement("li");
-  if (estaAcabando(item)) li.className = "acabando";
-
-  var status = estaAcabando(item) ? "Acabando" : "OK";
-  li.innerHTML = "<strong>" + item.nome + "</strong> (" + item.quantidade + " un.)<br>" +
-    diasRestantes(item) + " dia(s) restantes - <span class='status'>" + status + "</span>";
-
-  if (comBotao) {
-    var botao = document.createElement("button");
-    botao.textContent = "Comprei de novo";
-    botao.addEventListener("click", function () { comprouDeNovo(posicao); });
-    li.appendChild(document.createElement("br"));
-    li.appendChild(botao);
-  }
-  return li;
-}
-
-function mostrar() {
-  var listaDespensa = document.getElementById("lista-despensa");
-  var listaCompras = document.getElementById("lista-compras");
-  listaDespensa.innerHTML = "";
-  listaCompras.innerHTML = "";
-  var acabando = 0;
-
-  itens.forEach(function (item, posicao) {
-    listaDespensa.appendChild(criarLinha(item, posicao, false));
-    if (estaAcabando(item)) {
-      listaCompras.appendChild(criarLinha(item, posicao, true));
-      acabando++;
+const acoes = {
+  repor(id) { confirmarGravacao(estado.repor(id), "Contagem reiniciada."); },
+  remover(id, nome) {
+    if (!confirm(`Remover "${nome}" da despensa?`)) return;
+    confirmarGravacao(estado.remover(id), "Produto removido.");
+  },
+  salvarPrecos(id, campos) {
+    const resultados = campos.map((c) => validarPreco(c.value));
+    campos.forEach((c, k) => c.setAttribute("aria-invalid", resultados[k].ok ? "false" : "true"));
+    if (resultados.some((r) => !r.ok)) {
+      ui.mensagem("Use preços válidos, como 4,99. Deixe em branco o mercado sem preço.", "erro");
+      return; // mantém o que foi digitado
     }
-  });
+    confirmarGravacao(estado.definirPrecos(id, resultados.map((r) => r.valor)), "Preços salvos.");
+  },
+};
 
-  if (itens.length === 0) listaDespensa.innerHTML = "<li>Nenhum produto cadastrado.</li>";
-  if (acabando === 0) listaCompras.innerHTML = "<li>Nada acabando por enquanto.</li>";
-
-  document.getElementById("total").textContent = itens.length;
-  document.getElementById("total-acabando").textContent = acabando;
+async function carregarConfig() {
+  try {
+    const resposta = await fetch("data/dados.json");
+    if (!resposta.ok) throw new Error("HTTP " + resposta.status);
+    config = { ...config, ...(await resposta.json()) };
+  } catch (erro) {
+    console.error(erro);
+    ui.mensagem("Não foi possível carregar data/dados.json. Usando valores padrão.", "erro");
+  }
+  ui.preencherCategorias(config.categorias);
 }
 
-// ---------- Navegação entre telas ----------
-document.querySelectorAll("[data-ir]").forEach(function (botao) {
-  botao.addEventListener("click", function () {
-    document.querySelectorAll(".tela").forEach(function (tela) {
-      tela.classList.toggle("ativa", tela.id === botao.dataset.ir);
+function ligarFormulario() {
+  const form = document.getElementById("form-produto");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const r = validarProduto({
+      nome: d.get("nome"), categoria: d.get("categoria"),
+      quantidade: d.get("quantidade"), duracao: d.get("duracao"),
     });
-    mostrar();
+    ["nome", "quantidade", "duracao"].forEach((c) => ui.erroCampo(c, r.erros[c]));
+    if (!r.ok) {
+      ui.mensagem("Corrija os campos destacados.", "erro");
+      return; // não limpa o formulário: preserva o que foi digitado
+    }
+    const ok = estado.adicionar(r.valores);
+    if (ok) form.reset();
+    confirmarGravacao(ok, `"${r.valores.nome}" adicionado à despensa.`);
   });
-});
 
-// ---------- Detecção de conexão ----------
-function atualizarConexao() {
-  var el = document.getElementById("conexao");
-  el.textContent = navigator.onLine ? "online" : "offline";
-  el.className = navigator.onLine ? "" : "offline";
+  document.getElementById("exemplos").addEventListener("click", () => {
+    if (!config.exemplos.length) { ui.mensagem("Nenhum exemplo disponível.", "erro"); return; }
+    config.exemplos.forEach((x) => estado.adicionar(x));
+    confirmarGravacao(true, "Exemplos fictícios adicionados.");
+  });
 }
-window.addEventListener("online", atualizarConexao);
-window.addEventListener("offline", atualizarConexao);
 
-document.getElementById("adicionar").addEventListener("click", adicionar);
-atualizarConexao();
-mostrar();
+function registrarServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+  navigator.serviceWorker.register("service-worker.js").catch((erro) => console.error("Service Worker:", erro));
+}
+
+async function iniciarApp() {
+  window.addEventListener("online", ui.renderConexao);
+  window.addEventListener("offline", ui.renderConexao);
+  ui.renderConexao();
+  await carregarConfig();
+  ligarFormulario();
+  iniciar(atualizar);
+  registrarServiceWorker();
+}
+
+iniciarApp();

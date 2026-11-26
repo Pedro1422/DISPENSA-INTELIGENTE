@@ -1,14 +1,29 @@
-body { font-family: sans-serif; margin: 0; padding-bottom: 60px; }
-header { background: #1f6f5c; color: #fff; padding: 16px; font-weight: bold; display: flex; justify-content: space-between; }
+:root { --verde: #1f6f5c; --alerta: #c8431f; --borda: #ccc; }
+* { box-sizing: border-box; }
+body { font-family: system-ui, sans-serif; margin: 0; padding-bottom: 64px; line-height: 1.45; }
+header { background: var(--verde); color: #fff; padding: 16px; font-weight: bold; display: flex; justify-content: space-between; }
 header small { font-weight: normal; }
 header small.offline { color: #ffd0c4; }
-.tela { display: none; padding: 16px; }
-.tela.ativa { display: block; }
-input { display: block; width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box; }
-button { padding: 10px 16px; }
+main { max-width: 640px; margin: 0 auto; }
+.tela { padding: 16px; }
+label { display: block; font-weight: 600; margin-bottom: 4px; }
+input, select { display: block; width: 100%; padding: 10px; margin-bottom: 4px; font: inherit; }
+input[aria-invalid="true"] { border: 2px solid var(--alerta); }
+.erro { display: block; min-height: 1.2em; margin-bottom: 8px; color: var(--alerta); font-size: .9rem; }
+button, .botao { padding: 10px 16px; font: inherit; cursor: pointer; background: var(--verde); color: #fff; border: 0; border-radius: 6px; text-decoration: none; display: inline-block; }
+button.secundario { background: #fff; color: var(--verde); border: 1px solid var(--verde); margin-left: 6px; }
+button.perigo { background: var(--alerta); }
+:focus-visible { outline: 3px solid #f2b705; outline-offset: 2px; }
 ul { list-style: none; padding: 0; }
-li { border: 1px solid #ccc; border-radius: 6px; padding: 10px; margin-top: 10px; }
-li.acabando { border-left: 6px solid #c8431f; }
-.status { color: #c8431f; font-weight: bold; }
-nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: #eee; }
-nav button { flex: 1; border: 0; background: none; padding: 16px 0; }
+li { border: 1px solid var(--borda); border-radius: 6px; padding: 10px; margin-top: 10px; }
+li.acabando { border-left: 6px solid var(--alerta); }
+li .acoes { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
+.status { color: var(--alerta); font-weight: bold; }
+.precos { margin-top: 10px; }
+.mensagem { margin: 0; padding: 0 16px; }
+.mensagem:not(:empty) { padding: 10px 16px; font-weight: 600; }
+.mensagem.sucesso { background: #e1f3ea; color: #14513f; }
+.mensagem.erro-geral { background: #fbe3dc; color: #8a2a10; }
+nav { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: #eee; border-top: 1px solid var(--borda); }
+nav a { flex: 1; text-align: center; padding: 18px 0; color: #222; text-decoration: none; }
+nav a[aria-current="page"] { background: var(--verde); color: #fff; font-weight: bold; }

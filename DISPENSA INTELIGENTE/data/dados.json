@@ -1,0 +1,9 @@
+{
+  "mercados": ["Mercado A", "Mercado B", "Mercado C"],
+  "categorias": ["Alimentos", "Bebidas", "Limpeza", "Higiene", "Outros"],
+  "exemplos": [
+    { "nome": "Arroz 5 kg", "categoria": "Alimentos", "quantidade": 1, "duracao": 20 },
+    { "nome": "Detergente", "categoria": "Limpeza", "quantidade": 2, "duracao": 15 },
+    { "nome": "Papel higiênico", "categoria": "Higiene", "quantidade": 1, "duracao": 2 }
+  ]
+}
