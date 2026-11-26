@@ -74,6 +74,14 @@ function ligarFormulario() {
   });
 }
 
+function ligarLogin() {
+  document.getElementById("form-login").addEventListener("submit", (e) => {
+    e.preventDefault();
+    document.getElementById("login-aviso").textContent =
+      "Demonstração: a autenticação não está configurada. Nenhum dado foi enviado ou salvo.";
+  });
+}
+
 function registrarServiceWorker() {
   if (!("serviceWorker" in navigator)) return;
   navigator.serviceWorker.register("service-worker.js").catch((erro) => console.error("Service Worker:", erro));
@@ -85,6 +93,7 @@ async function iniciarApp() {
   ui.renderConexao();
   await carregarConfig();
   ligarFormulario();
+  ligarLogin();
   iniciar(atualizar);
   registrarServiceWorker();
 }

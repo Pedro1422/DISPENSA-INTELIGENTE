@@ -16,6 +16,21 @@
   <div id="mensagem" class="mensagem" role="status" aria-live="polite"></div>
 
   <main>
+    <section id="login" class="tela" aria-labelledby="t-login" hidden>
+      <h2 id="t-login">Entrar</h2>
+      <p>Esta é uma tela demonstrativa. A autenticação ainda não está configurada; os dados digitados não serão enviados nem salvos.</p>
+      <form id="form-login" class="login">
+        <label for="email-login">E-mail</label>
+        <input id="email-login" name="email" type="email" autocomplete="username" required>
+
+        <label for="senha-login">Senha</label>
+        <input id="senha-login" name="senha" type="password" autocomplete="current-password" required>
+
+        <button type="submit">Testar login</button>
+        <p id="login-aviso" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
     <section id="inicio" class="tela" aria-labelledby="t-inicio">
       <h2 id="t-inicio">Início</h2>
       <p>Saiba o que está acabando em casa e onde comprar mais barato.</p>
@@ -67,6 +82,7 @@
   </main>
 
   <nav aria-label="Principal">
+    <a href="#login">Login</a>
     <a href="#inicio">Início</a>
     <a href="#despensa">Despensa</a>
     <a href="#compras">Compras</a>
