@@ -1,5 +1,5 @@
 // Rotas por hash: só a tela da rota atual fica visível e o menu acompanha a URL.
-const ROTAS = ["login", "inicio", "despensa", "compras", "sobre"];
+const ROTAS = ["inicio", "despensa", "compras", "sobre"];
 
 export function iniciar(aoMudar) {
   function ir() {
