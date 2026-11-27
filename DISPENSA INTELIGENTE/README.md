@@ -47,7 +47,3 @@ DISPENSA INTELIGENTE/
 ## Tecnologias
 
 HTML, CSS e JavaScript puro, sem frameworks, com armazenamento em `localStorage`.
-
-## Login demonstrativo
-
-A aplicação inclui uma tela de login apenas para demonstração visual. Não há autenticação real: os dados digitados não são enviados nem armazenados, e o acesso às funcionalidades continua disponível sem uma conta.
