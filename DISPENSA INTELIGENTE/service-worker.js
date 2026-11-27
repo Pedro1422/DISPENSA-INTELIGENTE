@@ -1,6 +1,6 @@
-// Cache-first. Ao alterar qualquer arquivo do app, aumente a versão abaixo (v1 -> v2):
+// Cache-first. Ao alterar qualquer arquivo do app, aumente a versão abaixo (v2 -> v3):
 // o evento "activate" apaga os caches antigos e o app passa a usar os arquivos novos.
-const VERSAO = "despensa-v1";
+const VERSAO = "despensa-v2";
 const ARQUIVOS = [
   "./", "index.html", "css/style.css", "data/dados.json",
   "js/app.js", "js/armazenamento.js", "js/estado.js", "js/interface.js",
